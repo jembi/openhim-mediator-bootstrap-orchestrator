@@ -1,0 +1,34 @@
+{
+  "urn": "urn:uuid:bef52352-abb8-4934-a532-b44b792f8439",
+  "version": "0.0.1",
+  "name": "Bootstrap Orchestrator Mediator",
+  "description": "Tutorial Orchestrator Mediator",
+  "defaultChannelConfig": [
+    {
+      "name": "Bootstrap Orchestrator Mediator",
+      "urlPattern": "/testOrchestrator",
+      "routes": [
+        {
+          "name": "Bootstrap Orchestrator Mediator Route",
+          "host": "localhost",
+          "path": "/",
+          "port": "3002",
+          "primary": true,
+          "type": "http"
+        }
+      ],
+      "allow": ["admin"],
+      "type": "http"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "Bootstrap Orchestrator Mediator Route",
+      "host": "localhost",
+      "path": "/",
+      "port": "3002",
+      "primary": true,
+      "type": "http"
+    }
+  ]
+}
