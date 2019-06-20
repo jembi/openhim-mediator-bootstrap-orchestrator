@@ -12,7 +12,7 @@
           "name": "Bootstrap Orchestrator Mediator Route",
           "host": "localhost",
           "path": "/",
-          "port": "3002",
+          "port": "3001",
           "primary": true,
           "type": "http"
         }
@@ -26,7 +26,7 @@
       "name": "Bootstrap Orchestrator Mediator Route",
       "host": "localhost",
       "path": "/",
-      "port": "3002",
+      "port": "3001",
       "primary": true,
       "type": "http"
     }
