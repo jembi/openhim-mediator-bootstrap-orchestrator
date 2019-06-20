@@ -1,12 +1,12 @@
 {
-  "urn": "urn:uuid:bef52352-abb8-4934-a532-b44b792f8439",
+  "urn": "urn:mediator:tutorial_orchestrator",
   "version": "0.0.1",
-  "name": "Bootstrap Orchestrator Mediator",
+  "name": "Orchestrator Mediator",
   "description": "Tutorial Orchestrator Mediator",
   "defaultChannelConfig": [
     {
       "name": "Bootstrap Orchestrator Mediator",
-      "urlPattern": "/testOrchestrator",
+      "urlPattern": "^/orchestrator$",
       "routes": [
         {
           "name": "Bootstrap Orchestrator Mediator Route",
@@ -23,7 +23,7 @@
   ],
   "endpoints": [
     {
-      "name": "Bootstrap Orchestrator Mediator Route",
+      "name": "Bootstrap Orchestrator Mediator Endpoint",
       "host": "localhost",
       "path": "/",
       "port": "3001",
