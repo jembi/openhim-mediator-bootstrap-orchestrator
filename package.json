@@ -7,7 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-env": "^2.4.1",
     "express": "^4.17.1",
     "openhim-mediator-utils": "^0.2.3",
     "pino": "^5.12.6",
@@ -15,6 +15,6 @@
     "xml2json": "^0.11.2"
   },
   "scripts": {
-    "start": "babel-node --presets es2015 lib/index.js"
+    "start": "babel-node lib/index.js"
   }
 }
