@@ -3,6 +3,29 @@
   "version": "0.0.1",
   "name": "Orchestrator Mediator",
   "description": "Tutorial Orchestrator Mediator",
+  "configDefs": [
+    {
+      "param": "dhis",
+      "displayName": "DHIS2 Instance Details",
+      "description": "The custom DHIS2 instance details for data fetch",
+      "type": "struct",
+      "array": false,
+      "template": [
+        {
+          "param": "url",
+          "displayName": "DHIS2 URL",
+          "description": "The DHIS2 instance instance including credentials. ie: https://username:password@yourDhis2Instance.org",
+          "type": "string"
+        },
+        {
+          "param": "path",
+          "displayName": "DHIS2 Path",
+          "description": "The Path to the specific data you want from DHIS2",
+          "type": "string"
+        }
+      ]
+    }
+  ],
   "defaultChannelConfig": [
     {
       "name": "Bootstrap Orchestrator Mediator",
