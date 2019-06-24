@@ -15,6 +15,6 @@
     "xml2json": "^0.11.2"
   },
   "scripts": {
-    "start": "babel-node lib/index.js"
+    "start": "babel-node index.js"
   }
 }

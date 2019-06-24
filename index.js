@@ -18,7 +18,7 @@ const {
   OPENHIM_TRUST_SELF_SIGNED,
   LOG_LEVEL
 } = require('./constants.js')
-const mediatorConfig = require('../mediatorConfig.json')
+const mediatorConfig = require('./mediatorConfig.json')
 let config = {}
 
 const logger = pino({
