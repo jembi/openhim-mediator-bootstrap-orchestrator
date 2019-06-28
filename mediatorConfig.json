@@ -3,6 +3,35 @@
   "version": "0.0.1",
   "name": "Orchestrator Mediator",
   "description": "Tutorial Orchestrator Mediator",
+  "defaultChannelConfig": [
+    {
+      "name": "Bootstrap Orchestrator Mediator",
+      "urlPattern": "^/orchestrator$",
+      "routes": [
+        {
+          "name": "Bootstrap Orchestrator Mediator Route",
+          "host": "orchestrator",
+          "path": "/",
+          "port": "3001",
+          "primary": true,
+          "type": "http"
+        }
+      ],
+      "allow": ["admin"],
+      "methods": ["GET", "POST"],
+      "type": "http"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "Bootstrap Orchestrator Mediator Endpoint",
+      "host": "orchestrator",
+      "path": "/",
+      "port": "3001",
+      "primary": true,
+      "type": "http"
+    }
+  ],
   "configDefs": [
     {
       "param": "dhis",
@@ -24,34 +53,6 @@
           "type": "string"
         }
       ]
-    }
-  ],
-  "defaultChannelConfig": [
-    {
-      "name": "Bootstrap Orchestrator Mediator",
-      "urlPattern": "^/orchestrator$",
-      "routes": [
-        {
-          "name": "Bootstrap Orchestrator Mediator Route",
-          "host": "localhost",
-          "path": "/",
-          "port": "3001",
-          "primary": true,
-          "type": "http"
-        }
-      ],
-      "allow": ["admin"],
-      "type": "http"
-    }
-  ],
-  "endpoints": [
-    {
-      "name": "Bootstrap Orchestrator Mediator Endpoint",
-      "host": "localhost",
-      "path": "/",
-      "port": "3001",
-      "primary": true,
-      "type": "http"
     }
   ]
 }

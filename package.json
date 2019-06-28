@@ -1,20 +1,18 @@
 {
   "name": "openhim-mediator-bootstrap-basic-orchestrator",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Basic OpenHIM orchestrator mediator to be used for tutorials",
   "repository": "git@github.com:jembi/openhim-mediator-bootstrap-basic-orchestrator.git",
   "author": "Jembi Health Systems NPC",
+  "scripts": {
+    "start": "babel-node index.js"
+  },
   "license": "MIT",
   "dependencies": {
     "babel-cli": "^6.26.0",
     "babel-env": "^2.4.1",
     "express": "^4.17.1",
     "openhim-mediator-utils": "^0.2.3",
-    "pino": "^5.12.6",
-    "pino-pretty": "^3.1.0",
     "xml2json": "^0.11.2"
-  },
-  "scripts": {
-    "start": "babel-node index.js"
   }
 }
