@@ -135,13 +135,13 @@ app.all('*', (req, res) => {
 app.listen(3001, () => {
   // The activateHeartbeat method returns an Event Emitter which allows the mediator to attach listeners waiting
   // for specific events triggered by OpenHIM responses to the mediator posting its heartbeat.
-  const configEmitter = activateHeartbeat(openhimConfig)
-  configEmitter.on('error', err => {
+  const emitter = activateHeartbeat(openhimConfig)
+  emitter.on('error', err => {
     console.error('Heartbeat failed', err)
   })
 
   // The config events is emitted when the heartbeat request posted by the mediator returns data from the OpenHIM.
-  configEmitter.on('config', newConfig => {
+  emitter.on('config', newConfig => {
     console.log('Received updated config:', JSON.stringify(newConfig))
 
     // Update config for mediator
