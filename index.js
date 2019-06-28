@@ -1,16 +1,22 @@
 'use strict'
 
 import express from 'express'
+
+// The OpenHIM Mediator Utils is an essential package for quick mediator setup.
+// It handles the OpenHIM authentication, mediator registration, and mediator heartbeat.
 import {
   activateHeartbeat,
   fetchConfig,
   registerMediator
 } from 'openhim-mediator-utils'
+
 import { get } from 'request'
 import uuid from 'uuid/v4'
 import { toJson } from 'xml2json'
 import { resolve } from 'url'
 
+// The mediatorConfig file contains some basic configuration settings about the mediator
+// as well as details about the default channel setup.
 import mediatorConfig, { urn } from './mediatorConfig.json'
 
 const openhimConfig = {
@@ -23,6 +29,7 @@ const openhimConfig = {
 
 let config = {}
 
+// The OpenHIM accepts a specific response structure which allows transactions to display correctly
 function buildReturnObject(urn, status, statusCode, responseBody) {
   var response = {
     status: statusCode,
@@ -38,11 +45,14 @@ function buildReturnObject(urn, status, statusCode, responseBody) {
   }
 }
 
+// Take the XML facility data from DHIS2 and convert it to JSON and add a UUID
+// The logic applied here is arbitrary however it is useful to see how it is implemented.
 function transformDhisData(xmlData) {
   const jsonDhisData = toJson(xmlData, { object: true, trim: true })
 
   console.log('Received XML data from DHIS2')
 
+  // Make sure the structure of the GET request is in teh expected form...
   if (
     jsonDhisData &&
     jsonDhisData.metadata &&
@@ -53,6 +63,8 @@ function transformDhisData(xmlData) {
       jsonDhisData.metadata.organisationUnits.organisationUnit
 
     console.log('Adding universally unique id(uuid) to each org unit...')
+
+    // Add a UUID to each facility. This is arbitrary and is just for demonstration purposes.
     organisationUnits.forEach(organisationUnit => {
       organisationUnit.systemID = uuid()
     })
@@ -66,8 +78,12 @@ function transformDhisData(xmlData) {
 
 const app = express()
 
+// Only a GET request to /facilities will trigger the DHIS2 orchestration
 app.get('/facilities', async (req, res) => {
+  // This content type is OpenHIM specific and is used to track orchestrations and update transactions
   res.set('Content-Type', 'application/json+openhim')
+
+  // The config here comes from the config entered by the User in the openHIM console.
   if (config.dhis && config.dhis.url && config.dhis.path) {
     const dhisUri = resolve(config.dhis.url, config.dhis.path)
     get(dhisUri, (err, resp, body) => {
@@ -88,6 +104,7 @@ app.get('/facilities', async (req, res) => {
       let facilities
 
       try {
+        // If there is an issue with XML data it will throw an error...
         facilities = transformDhisData(body)
       } catch (err) {
         console.error('Error parsing xml', err.message)
@@ -99,6 +116,7 @@ app.get('/facilities', async (req, res) => {
       res.send(buildReturnObject(urn, 'Successful', 200, facilities))
     })
   } else {
+    // Remind the User to add the mediator config in the console if they attempt requests before adding it.
     console.error('Missing mediator config...')
     res.send(
       buildReturnObject(urn, 'Failed', 400, {
@@ -108,16 +126,21 @@ app.get('/facilities', async (req, res) => {
   }
 })
 
+// Any request regardless of request type or url path to the mediator port will be caught here
+// and trigger the canned response.
 app.all('*', (req, res) => {
   res.send('Hope you are enjoying the tutorial!!')
 })
 
 app.listen(3001, () => {
+  // The activateHeartbeat method returns an Event Emitter which allows the mediator to attach listeners waiting
+  // for specific events triggered by OpenHIM responses to the mediator posting its heartbeat.
   const configEmitter = activateHeartbeat(openhimConfig)
   configEmitter.on('error', err => {
     console.error('Heartbeat failed', err)
   })
 
+  // The config events is emitted when the heartbeat request posted by the mediator returns data from the OpenHIM.
   configEmitter.on('config', newConfig => {
     console.log('Received updated config:', JSON.stringify(newConfig))
 
@@ -126,6 +149,11 @@ app.listen(3001, () => {
   })
 })
 
+// The purpose of registering the mediator is to allow easy communication between the mediator and the OpenHIM.
+// The details received by the OpenHIM will allow quick channel setup which will allow tracking of requests from
+// the client through any number of mediators involved and all the responses along the way(if the mediators are
+// properly configured). Moreover, if the request fails for any reason all the details are recorded and it can
+// be replayed at a later date to prevent data loss.
 registerMediator(openhimConfig, mediatorConfig, err => {
   if (err) {
     console.error('Failed to register mediator. Check your Config: ', err)
