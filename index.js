@@ -27,6 +27,7 @@ const openhimConfig = {
   urn
 }
 
+// Allow config to be updated from the OpenHIM Console and make the updates accessible.
 let config = {}
 
 // The OpenHIM accepts a specific response structure which allows transactions to display correctly
@@ -170,5 +171,7 @@ fetchConfig(openhimConfig, (err, initialConfig) => {
   }
 
   console.log('Initial Config: ', JSON.stringify(initialConfig))
+
+  // Add initial config values
   config = initialConfig
 })
