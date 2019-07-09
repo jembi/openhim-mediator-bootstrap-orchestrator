@@ -81,7 +81,7 @@ function transformXmlDhisDataToJson(xmlData) {
 const app = express()
 
 // Only a GET request to /facilities will trigger the DHIS2 orchestration
-app.get('/facilities', async (req, res) => {
+app.get('/facilities', async (_req, res) => {
   // The config here comes from the config entered by the User in the openHIM console.
   if (config.dhis && config.dhis.url && config.dhis.path) {
     const dhisUri = resolve(config.dhis.url, config.dhis.path)
@@ -127,7 +127,7 @@ app.get('/facilities', async (req, res) => {
 
 // Any request regardless of request type or url path to the mediator port will be caught here
 // and trigger the canned response.
-app.all('*', (req, res) => {
+app.all('*', (_req, res) => {
   res.send('Hope you are enjoying the tutorial!!')
 })
 
