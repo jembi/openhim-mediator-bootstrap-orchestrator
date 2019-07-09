@@ -10,7 +10,7 @@ import {
   registerMediator
 } from 'openhim-mediator-utils'
 
-import { get } from 'request'
+import fetch from 'node-fetch'
 import uuid from 'uuid/v4'
 import { toJson } from 'xml2json'
 import { resolve } from 'url'
@@ -53,7 +53,7 @@ function transformXmlDhisDataToJson(xmlData) {
 
   console.log('Received XML data from DHIS2')
 
-  // Make sure the structure of the GET request is in teh expected form...
+  // Make sure the structure of the GET request is in the expected form...
   if (
     jsonDhisData &&
     jsonDhisData.metadata &&
@@ -72,7 +72,7 @@ function transformXmlDhisDataToJson(xmlData) {
     })
     return organisationUnits
   } else {
-    // The Data structure may change with DHIS2 versions
+    // The data structure may change with DHIS2 versions
     console.error(`Unexpected data structure: ${jsonDhisData}`)
     return null
   }
@@ -85,48 +85,19 @@ app.get('/facilities', async (_req, res) => {
   // The config here comes from the config entered by the User in the openHIM console.
   if (config.dhis && config.dhis.url && config.dhis.path) {
     const dhisUri = resolve(config.dhis.url, config.dhis.path)
-    get(dhisUri, (err, resp, body) => {
-      if (err) {
-        console.error('Failed request to DHIS.', err)
 
-        const returnObject = buildReturnObject(urn, 'Failed', 500, err)
-        res.send(returnObject)
-        return
-      }
-      if (resp.statusCode !== 200) {
-        console.error(
-          `Unexpected status code from DHIS: ${
-            resp.statusCode
-          }. URL: ${dhisUri}`
-        )
+    const dhisFacilitiesInXml = await fetch(dhisUri).then(res => res.text())
 
-        const returnObject = buildReturnObject(
-          urn,
-          'Failed',
-          resp.statusCode,
-          resp.body
-        )
-        res.send(returnObject)
-        return
-      }
-      let facilities
+    const facilityDataInJson = transformXmlDhisDataToJson(dhisFacilitiesInXml)
 
-      try {
-        // If there is an issue with XML data format it will throw an error...
-        facilities = transformXmlDhisDataToJson(body)
-      } catch (err) {
-        console.error('Error parsing xml', err.message)
+    const returnObject = buildReturnObject(
+      urn,
+      'Successful',
+      200,
+      facilityDataInJson
+    )
 
-        const returnObject = buildReturnObject(urn, 'Failed', 500, err)
-        res.send(returnObject)
-        return
-      }
-
-      console.log('Successfully transformed data from DHIS!')
-
-      const returnObject = buildReturnObject(urn, 'Successful', 200, facilities)
-      res.send(returnObject)
-    })
+    res.send(returnObject)
   } else {
     // Remind the User to add the mediator config in the console if they attempt requests before adding it.
     console.error('Missing mediator config...')
