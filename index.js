@@ -88,7 +88,9 @@ app.get('/facilities', async (_req, res) => {
     get(dhisUri, (err, resp, body) => {
       if (err) {
         console.error('Failed request to DHIS.', err)
-        res.send(buildReturnObject(urn, 'Failed', 500, err))
+
+        const returnObject = buildReturnObject(urn, 'Failed', 500, err)
+        res.send(returnObject)
         return
       }
       if (resp.statusCode !== 200) {
@@ -97,7 +99,14 @@ app.get('/facilities', async (_req, res) => {
             resp.statusCode
           }. URL: ${dhisUri}`
         )
-        res.send(buildReturnObject(urn, 'Failed', resp.statusCode, resp.body))
+
+        const returnObject = buildReturnObject(
+          urn,
+          'Failed',
+          resp.statusCode,
+          resp.body
+        )
+        res.send(returnObject)
         return
       }
       let facilities
@@ -107,21 +116,25 @@ app.get('/facilities', async (_req, res) => {
         facilities = transformXmlDhisDataToJson(body)
       } catch (err) {
         console.error('Error parsing xml', err.message)
-        res.send(buildReturnObject(urn, 'Failed', 500, err))
+
+        const returnObject = buildReturnObject(urn, 'Failed', 500, err)
+        res.send(returnObject)
         return
       }
 
       console.log('Successfully transformed data from DHIS!')
-      res.send(buildReturnObject(urn, 'Successful', 200, facilities))
+
+      const returnObject = buildReturnObject(urn, 'Successful', 200, facilities)
+      res.send(returnObject)
     })
   } else {
     // Remind the User to add the mediator config in the console if they attempt requests before adding it.
     console.error('Missing mediator config...')
-    res.send(
-      buildReturnObject(urn, 'Failed', 400, {
-        message: 'Please add DHIS2 config via OpenHIM console'
-      })
-    )
+
+    const returnObject = buildReturnObject(urn, 'Failed', 400, {
+      message: 'Please add DHIS2 config via OpenHIM console'
+    })
+    res.send(returnObject)
   }
 })
 
