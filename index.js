@@ -81,9 +81,6 @@ const app = express()
 
 // Only a GET request to /facilities will trigger the DHIS2 orchestration
 app.get('/facilities', async (req, res) => {
-  // This content type is OpenHIM specific and is used to track orchestrations and update transactions
-  res.set('Content-Type', 'application/json+openhim')
-
   // The config here comes from the config entered by the User in the openHIM console.
   if (config.dhis && config.dhis.url && config.dhis.path) {
     const dhisUri = resolve(config.dhis.url, config.dhis.path)
