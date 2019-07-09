@@ -48,7 +48,7 @@ function buildReturnObject(urn, status, statusCode, responseBody) {
 
 // Take the XML facility data from DHIS2 and convert it to JSON and add a UUID
 // The logic applied here is arbitrary however it is useful to see how it is implemented.
-function transformDhisData(xmlData) {
+function transformXmlDhisDataToJson(xmlData) {
   const jsonDhisData = toJson(xmlData, { object: true, trim: true })
 
   console.log('Received XML data from DHIS2')
@@ -102,8 +102,8 @@ app.get('/facilities', async (req, res) => {
       let facilities
 
       try {
-        // If there is an issue with XML data it will throw an error...
-        facilities = transformDhisData(body)
+        // If there is an issue with XML data format it will throw an error...
+        facilities = transformXmlDhisDataToJson(body)
       } catch (err) {
         console.error('Error parsing xml', err.message)
         res.send(buildReturnObject(urn, 'Failed', 500, err))
