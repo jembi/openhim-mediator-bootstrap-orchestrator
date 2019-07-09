@@ -60,6 +60,7 @@ function transformXmlDhisDataToJson(xmlData) {
     jsonDhisData.metadata.organisationUnits &&
     jsonDhisData.metadata.organisationUnits.organisationUnit
   ) {
+    // An Organisation Unit in DHIS2 is a generic grouping term. In this context it refers to a medical Facility.
     const organisationUnits =
       jsonDhisData.metadata.organisationUnits.organisationUnit
 
@@ -161,6 +162,8 @@ registerMediator(openhimConfig, mediatorConfig, err => {
   console.log('Successfully registered mediator!')
 })
 
+// This function retrieves existing config contained in the OpenHIM. This config may be existing for two reasons:
+// Firstly, config can be set on mediator registration, Second, the config will be persisted between mediator restarts.
 fetchConfig(openhimConfig, (err, initialConfig) => {
   if (err) {
     console.error('Failed to fetch initial config: ', err)
