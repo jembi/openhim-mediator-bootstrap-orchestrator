@@ -6,7 +6,7 @@
   "defaultChannelConfig": [
     {
       "name": "Bootstrap Orchestrator Mediator",
-      "urlPattern": "^/orchestrator$",
+      "urlPattern": "^/facilities$",
       "routes": [
         {
           "name": "Bootstrap Orchestrator Mediator Route",
